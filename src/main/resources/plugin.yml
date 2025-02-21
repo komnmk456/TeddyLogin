@@ -1,4 +1,4 @@
-name: 'UserLogin'
+name: 'TedyLogin'
 version: '${project.version}'
 api-version: 1.13
 main: 'com.elchologamer.userlogin.UserLogin'
