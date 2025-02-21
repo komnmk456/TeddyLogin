@@ -124,9 +124,15 @@ public class ULPlayer {
     }
 
     public void onAuthenticate(AuthType type) {
-        Player player = getPlayer();
-        FileConfiguration config = plugin.getConfig();
+        // ตรวจสอบว่า UUID ของผู้เล่นยังออนไลน์หรือไม่
+        Player player = plugin.getServer().getPlayer(uuid);  // ใช้ UUID ที่เก็บไว้ในการตรวจสอบ
+        if (player == null) {
+            plugin.getLogger().warning("Player with UUID " + uuid + " is not online.");
+            return;  // หยุดการทำงานหากผู้เล่นไม่ออนไลน์
+        }
 
+        
+        FileConfiguration config = plugin.getConfig();
         ConfigurationSection teleports = config.getConfigurationSection("teleports");
         assert teleports != null;
 
@@ -280,9 +286,11 @@ public class ULPlayer {
 
     public Player getPlayer() {
         Player player = plugin.getServer().getPlayer(uuid);
-        if (player == null)
-            throw new IllegalArgumentException("Player with UUID " + uuid + " not found");
-
+        if (player == null) {
+            // ผู้เล่นไม่ออนไลน์
+            plugin.getLogger().warning("Player with UUID " + uuid + " is not online.");
+            return null;  // หรือสามารถจัดการอื่นๆ ได้ เช่น การส่งข้อความเตือน
+        }
         return player;
     }
 
