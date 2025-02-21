@@ -198,7 +198,7 @@ public class ULPlayer {
 
         if (++loginAttempts >= maxAttempts) {
             Bukkit.getScheduler().runTask(plugin, () -> {
-                Player player = getPlayer(); // Get player reference inside the main thread
+                Player player = Bukkit.getPlayer(uuid); // ใช้ Bukkit.getPlayer แทน getPlayer
                 if (player != null && player.isOnline()) {
                     player.kickPlayer(
                         plugin.getLang().getMessage("messages.max_attempts_exceeded").replace("{count}", Integer.toString(maxAttempts))
