@@ -198,9 +198,12 @@ public class ULPlayer {
 
         if (++loginAttempts >= maxAttempts) {
             Bukkit.getScheduler().runTask(plugin, () -> {
-                getPlayer().kickPlayer(
-                    plugin.getLang().getMessage("messages.max_attempts_exceeded").replace("{count}", Integer.toString(maxAttempts))
-                );
+                Player player = getPlayer(); // Get player reference inside the main thread
+                if (player != null && player.isOnline()) {
+                    player.kickPlayer(
+                        plugin.getLang().getMessage("messages.max_attempts_exceeded").replace("{count}", Integer.toString(maxAttempts))
+                    );
+                }
             });
             return false;
         } else {
