@@ -5,6 +5,8 @@ import com.elchologamer.userlogin.api.event.AuthenticationEvent;
 import com.elchologamer.userlogin.api.types.AuthType;
 import com.elchologamer.userlogin.util.QuickMap;
 import com.elchologamer.userlogin.util.Utils;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -195,9 +197,11 @@ public class ULPlayer {
         int maxAttempts = plugin.getConfig().getInt("password.maxLoginAttempts");
 
         if (++loginAttempts >= maxAttempts) {
-            getPlayer().kickPlayer(
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                getPlayer().kickPlayer(
                     plugin.getLang().getMessage("messages.max_attempts_exceeded").replace("{count}", Integer.toString(maxAttempts))
-            );
+                );
+            });
             return false;
         } else {
             return true;
